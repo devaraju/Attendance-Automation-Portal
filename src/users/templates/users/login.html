@@ -1,0 +1,51 @@
+{% extends 'users/user_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block user_form_content %}
+
+<div class="container">
+
+    <!-- Outer Row  -->
+    <div class="row justify-content-center my-5">
+
+        <div class="col-xl-5 col-lg-12 col-md-9">
+
+            <div class="card shadow-lg border-0">
+                <div class="card-body">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+
+                        <div class="col-lg-9 mx-auto">
+                            <div class="py-5 text-center">
+                                <div>
+                                    <h1 class="h4 text-gray-900 mb-4">Welcome to AA!</h1>
+                                </div>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-outline-success" value="Login">
+                                    </div>
+                                </form>
+
+                                <hr>
+                                <div class="text-center" style="display: none;">
+                                    <a class="small" href="#">Forgot Password?</a>
+                                </div>
+                                <div class="text-center">
+                                    <a class="small" href="{% url 'register' %}">Create an Account!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

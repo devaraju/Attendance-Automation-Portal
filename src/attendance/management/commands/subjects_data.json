@@ -1,0 +1,26 @@
+[
+    {
+        "subject_id":"CS4204",
+	    "subject_name": "soft computing",
+        "branch": "cse",
+        "year": "engg4"
+    },
+    {
+        "subject_id":"CS4201",
+	    "subject_name": "software architecture and design patterns",
+        "branch": "cse",
+        "year": "engg4"
+    },
+    {
+        "subject_id":"CS4206",
+	    "subject_name": "human computer interaction",
+        "branch": "cse",
+        "year": "engg4"
+    },
+    {
+        "subject_id":"CS4205",
+	    "subject_name": "mobile adhoc networks",
+        "branch": "cse",
+        "year": "engg4"
+    }
+]

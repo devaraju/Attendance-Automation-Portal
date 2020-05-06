@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<center>
+<table>
+    <tr>
+        <td>
+            <h1>Video Streaming</h1>
+            <img src="{% url 'videostream' stream_path='video' %}">
+        </td>
+    </tr>
+</table>
+</center>
+{%endblock%}

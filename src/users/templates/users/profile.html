@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block form_content %}
+<br>
+    <div class="content-section" >
+        <div class="media" style="margin-left: 20%; text-align: center;">
+            {% if not user.is_staff %}
+                <img class="rounded-circle account-img" alt="" src="http://intranet.rguktn.ac.in/SMS/usrphotos/user/{{user.username}}.jpg">
+            {% endif %}
+            <div class="media-body" style="margin-top: 5%; margin-right: 20%;">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary"> {{ user.username }}@rguktn.ac.in</p>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock form_content%}

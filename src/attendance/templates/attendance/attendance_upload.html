@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Attendance Data</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">DataTable</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable from <strong>{{ file_name}}</strong></h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Student ID</th>
+                                <th>Date & Time</th>
+                                <th>Faculty</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        
+                            <tbody>
+                            {% for row in data %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><input type="text" readonly class="form-control-plaintext p-0 m-0" value="{{ row.student_id }}" name="student_id_{{ forloop.counter }}"></td>
+                                <td><input type="text" readonly class="form-control-plaintext p-0 m-0" value="{{ row.date_attended }}" name="date_attended_{{ forloop.counter }}"></td>
+                                <td><input type="text" readonly class="form-control-plaintext p-0 m-0" value="{{ row.faculty_id }}" name="faculty_id_{{ forloop.counter }}"></td>
+                                <td><input type="text" readonly class="form-control-plaintext p-0 m-0" value="{{ row.subject_id }}" name="subject_id_{{ forloop.counter }}"></td>
+                                <td>
+                                    <!-- <input id="check_{{ forloop.counter }}" type="checkbox" name="check_{{ forloop.counter }}" checked onchange="myCheck(this)"/> -->
+                                    <input id="check_{{ forloop.counter }}" type="checkbox" name="check_{{ forloop.counter }}" checked onchange="myCheck(this)" data-size="sm" data-toggle="toggle" data-on="Present" data-off="Absent" data-onstyle="success" data-offstyle="danger" />
+                                    <!-- <input type="checkbox" data-size="sm" name="check_{{ forloop.counter }}" checked data-toggle="toggle" data-on="Present" data-off="Absent" data-onstyle="success" data-offstyle="danger"> -->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                    <center>
+                        <input class="btn btn-outline-primary btn-md mx-auto mt-3" type="submit" value="Submit" />
+                    </center>
+                </form>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<script>
+    function myCheck(obj){
+        if (obj.checked)
+            obj.value = 'off';
+        else
+            obj.value = 'on';
+    }
+</script>
+
+
+{%endblock%}

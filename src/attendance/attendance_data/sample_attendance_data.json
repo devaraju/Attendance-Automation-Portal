@@ -1,0 +1,456 @@
+[
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140297",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 31, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140297",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 31, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140297",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 31, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140297",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 30, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140297",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 30, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140297",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 30, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140297",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 29, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140297",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 29, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140297",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 29, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140297",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 28, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140297",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 28, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140297",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 28, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140297",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 27, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140297",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 27, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140297",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 27, 2020, 11:25 a.m."
+    },
+
+
+
+
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140249",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 31, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140249",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 31, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140249",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 31, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140249",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 30, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140249",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 30, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140249",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 30, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140249",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 29, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140249",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 29, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140249",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 29, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140249",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 28, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140249",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 28, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140249",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 28, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140249",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 27, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140249",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 27, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140249",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 27, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140426",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 31, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140426",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 31, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140426",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 31, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140426",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 30, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140426",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 30, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140426",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 30, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140426",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 29, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140426",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 29, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140426",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 29, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140426",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 28, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140426",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 28, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140426",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 28, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140426",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 27, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140426",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 27, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140426",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 27, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140782",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 31, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140782",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 31, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140782",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 31, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140782",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 30, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140782",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 30, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140782",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 30, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140782",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 29, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140782",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 29, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140782",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 29, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140782",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 28, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140782",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 28, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140782",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 28, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140782",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 27, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Bhanu Prakash",
+        "student_id": "N140782",
+	    "subject_id": "manet",
+        "date_attended": "Jan. 27, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140782",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 27, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140199",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 31, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140199",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 31, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140199",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 31, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140199",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 30, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140199",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 30, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140199",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 30, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140199",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 29, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140199",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 29, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140199",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 29, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140199",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 28, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140199",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 28, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140199",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 28, 2020, 11:25 a.m."
+    },
+    {
+        "faculty_id":"Uday Kumar",
+        "student_id": "N140199",
+	    "subject_id": "human computer interaction",
+        "date_attended": "Jan. 27, 2020, 9:25 a.m."
+    },
+    {
+        "faculty_id":"Rajasree",
+        "student_id": "N140199",
+	    "subject_id": "software architecture and design patterns",
+        "date_attended": "Jan. 27, 2020, 10:25 a.m."
+    },
+    {
+        "faculty_id":"Bharat",
+        "student_id": "N140199",
+	    "subject_id": "soft computing",
+        "date_attended": "Jan. 27, 2020, 11:25 a.m."
+    }
+]

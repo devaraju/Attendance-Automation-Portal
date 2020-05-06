@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <form>
+            <div class="form-row">
+                <div class="col-2">
+                </div>
+                {% if user.is_staff %}
+                <div class="col form-group">
+                    <!-- <label>Subject:</label> -->
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="idno_extact" placeholder="Student ID">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <!-- <label>Subject:</label> -->
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="section_extact" placeholder="Section">
+                    </div>
+                </div>
+
+                {% endif %}
+                <div class="col form-group">
+                    <!-- <label>Subject:</label> -->
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="subject_extact" placeholder="Subject">
+                    </div>
+                </div>
+                
+
+                <div class="col-1">
+                    <button type="submit" disabled class="form-control btn btn-outline-secondary btn-sm"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="col-2">
+                </div>
+            </div>
+        </form>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header border-0" style="background-color: whitesmoke;">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Online Store Visitors</h3>
+                            <a href="javascript:void(0);">View Report</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span class="text-bold text-lg">820</span>
+                                <span>Visitors Over Time</span>
+                            </p>
+                            <p class="ml-auto d-flex flex-column text-right">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 12.5%
+                                </span>
+                                <span class="text-muted">Since last week</span>
+                            </p>
+                        </div>
+                        <!-- /.d-flex -->
+
+                        <div class="position-relative mb-4">
+                            <canvas id="myBarChart" height="200"></canvas>
+
+                            <!-- <canvas id="visitors-chart" height="200"></canvas> -->
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> This Week
+                            </span>
+
+                            <span>
+                                <i class="fas fa-square text-gray"></i> Last Week
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col-md-6 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header border-0" style="background-color: whitesmoke;">
+                        <div class="d-flex justify-content-between" >
+                            <h3 class="card-title">Sales</h3>
+                            <a href="javascript:void(0);">View Report</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span class="text-bold text-lg">$18,230.00</span>
+                                <span>Sales Over Time</span>
+                            </p>
+                            <p class="ml-auto d-flex flex-column text-right">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 33.1%
+                                </span>
+                                <span class="text-muted">Since last month</span>
+                            </p>
+                        </div>
+                        <!-- /.d-flex -->
+
+                        <div class="position-relative mb-4">
+                            <canvas id="myLineChart" height="200"></canvas>
+
+                            <!-- <canvas id="sales-chart" height="200"></canvas> -->
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> This year
+                            </span>
+
+                            <span>
+                                <i class="fas fa-square text-gray"></i> Last year
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+
+
+
+
+
+
+<h1>{{ x_labels }}</h1>
+
+<script>
+    // var myXLabels = '{{  x_labels|escapejs }}';
+    var myXLabels = new Array('{% for label in x_labels %} {{label|escape}},{% endfor %}');
+    // var myXLabels = ['{% for label in x_labels %} {{label|escape}},{% endfor %}'];
+    alert(myXLabels)
+    $(document).ready(function () {
+        var ctx = document.getElementById('myBarChart');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                // labels : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                labels : myXLabels,
+                // labels: [ {% for label in x_labels %} {{ x_labels }},{% endfor %}], 
+                datasets: [{
+                    label: 'Total classes',
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    data: [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                },
+                {
+                    label: 'Attended classes',
+                    backgroundColor: '#ced4da',
+                    borderColor: '#ced4da',
+                    data: [700, 1700, 2700, 2000, 1800, 1500, 2000]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctx = document.getElementById('myLineChart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                datasets: [{
+                    label: 'Total classes',
+                    data: [1000, 2000, 3000, 2500, 2700, 2500, 3000],
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                },
+                {
+                    label: 'Attended classes',
+                    data: [700, 1700, 2700, 2000, 1800, 1500, 2000],
+                    backgroundColor: 'transparent',
+                    borderColor: '#ced4da',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    })
+</script>
+
+{% endblock content %}

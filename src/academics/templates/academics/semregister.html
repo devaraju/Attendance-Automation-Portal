@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container text-center">
+    {% if reg_status %}
+        {% for data in reg_data %}
+            <br><br><input style="width: 40%;" type="text" value="{{data}}" readonly>
+        {% endfor %}
+
+    {% else %}
+        <form method="POST" style="padding-top: 5%;" >
+            {% csrf_token %}
+            {% for cnt in subjects_count %}
+            <strong>SUBJECT-{{cnt}}:</strong>&nbsp;
+            <select name="subject{{cnt}}" class="positionTypes" required>
+                <option value="" disabled selected >Choose Subject</option>
+                {% for subject in subjects_avail %}
+                <option value="{{subject}}">{{subject}}</option>
+                {% endfor %}
+            </select><br><br>
+            {% endfor %}
+            <input type="submit" class="btn btn-outline-success my-2 my-sm-0" value="Register" >
+
+        </form>
+    {% endif %}
+</div>
+
+<script>
+$("select.positionTypes").change(function () {
+    $("select.positionTypes option[value='" + $(this).data('index') + "']").prop('disabled', false);
+    $(this).data('index', this.value);
+    $("select.positionTypes option[value='" + this.value + "']:not([value=''])").prop('disabled', true);
+    $(this).find("option[value='" + this.value + "']:not([value=''])").prop('disabled', false);
+    });
+</script>
+
+{%endblock%}
