@@ -17,7 +17,7 @@ def studentRegister(request):
             return redirect('login')
     else:
         form = StudentRegisterForm()
-    return render(request, 'users/register.html',{ 'form':form, 'user':'Student' })
+    return render(request, 'users/register.html',{ 'form':form, 'user_type':'Student' })
 
 def facultyRegister(request):
     if request.method == 'POST':
@@ -29,27 +29,27 @@ def facultyRegister(request):
             return redirect('login')
     else:
         form = FacultyRegisterForm()
-    return render(request, 'users/register.html',{ 'form':form , 'user':'Faculty' })
+    return render(request, 'users/register.html',{ 'form':form , 'user_type':'Faculty' })
 
-@login_required
-def profile(request):
-    user = request.user
-    if request.method == 'POST':
-        form = FacultyUpdateForm(request.POST, instance=request.user.faculty) if user.is_staff else StudentUpdateForm(request.POST, instance=request.user.student)
-        # if user.is_staff:
-        #     form = FacultyUpdateForm(request.POST, instance=request.user.faculty)
-        # else:
-        #     form = StudentUpdateForm(request.POST, instance=request.user.student)
+# @login_required
+# def profile(request):
+#     user = request.user
+#     if request.method == 'POST':
+#         form = FacultyUpdateForm(request.POST, instance=request.user.faculty) if user.is_staff else StudentUpdateForm(request.POST, instance=request.user.student)
+#         # if user.is_staff:
+#         #     form = FacultyUpdateForm(request.POST, instance=request.user.faculty)
+#         # else:
+#         #     form = StudentUpdateForm(request.POST, instance=request.user.student)
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, f'Profile has been updated!')
-            return redirect('profile')
-    else:
-        form = FacultyUpdateForm(instance=request.user.faculty) if user.is_staff else StudentUpdateForm(instance=request.user.student)
-        # if user.is_staff:
-        #     form = FacultyUpdateForm(instance=request.user.faculty)
-        # else:
-        #     form = StudentUpdateForm(instance=request.user.student)
-    context = {'form': form}
-    return render(request, 'users/profile.html', context)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, f'Profile has been updated!')
+#             return redirect('profile')
+#     else:
+#         form = FacultyUpdateForm(instance=request.user.faculty) if user.is_staff else StudentUpdateForm(instance=request.user.student)
+#         # if user.is_staff:
+#         #     form = FacultyUpdateForm(instance=request.user.faculty)
+#         # else:
+#         #     form = StudentUpdateForm(instance=request.user.student)
+#     context = {'form': form}
+#     return render(request, 'users/profile.html', context)

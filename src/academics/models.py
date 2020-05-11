@@ -12,7 +12,7 @@ class No_of_Subjects(models.Model):
     no_of_subjects = models.IntegerField()
 
     def __str__(self):
-        return f'{self.no_of_subjects} subjects allowed to {self.year}{self.branch} students.'
+        return f'{self.no_of_subjects} subjects allowed to {self.year}-{self.branch} students.'
 
 class Subject(models.Model):
     subject_id = models.CharField(max_length=10,primary_key=True)

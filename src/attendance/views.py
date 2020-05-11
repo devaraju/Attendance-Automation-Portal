@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.views.decorators import gzip
 from datetime import datetime
 import face_recognition
-import json
+import calendar
 import time
 import cv2
 import sys
@@ -26,11 +26,23 @@ from .facial_mathcing.testing import getFacialMatching
 
 # <<< USER DEFINED VIEWS >>>
 
-def get_frame():
+ALL_YEARS = AttendanceLog.objects.all().distinct('year')
+ALL_SECTIONS = AttendanceLog.objects.all().distinct('section')
+ALL_BRANCHES = AttendanceLog.objects.all().distinct('branch')
+ALL_SUBJECTS = Subject.objects.all().distinct('subject_name')
+
+SELECTION_DATA = {'ALL_BRANCHES':ALL_BRANCHES, 'ALL_SECTIONS':ALL_SECTIONS, 'ALL_SUBJECTS':ALL_SUBJECTS, 'ALL_YEARS':ALL_YEARS }
+
+def get_frame(user):
     camera =cv2.VideoCapture(-1)
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
     attendance_file = os.path.join(base_dir, 'attendance_data', 'attendance_'+str(datetime.now())+'.csv')
+
+    faculty_id = Faculty.objects.get(faculty_id=user)
+    fac_teach_sub = Teaching.objects.get(faculty_id=faculty_id).subject_id
+    subject_id = Subject.objects.get(subject_id=fac_teach_sub.subject_id)
+
 
     with open(attendance_file, 'w') as csv_file:
         fieldnames = ['student_id', 'date_attended', 'faculty_id','subject_id']
@@ -53,7 +65,7 @@ def get_frame():
                         idnos = getFacialMatching(rgb_image, faces)
                         for idno in idnos:
                             if idno not in all_idnos:
-                                writer.writerow({'student_id': idno, 'date_attended': datetime.now(), 'faculty_id': 'testing', 'subject_id':'test-sub'})
+                                writer.writerow({'student_id': idno, 'date_attended': datetime.now(), 'faculty_id': faculty_id, 'subject_id':subject_id})
                                 all_idnos.append(idno)
 
                     imgencode=cv2.imencode('.jpg', image)[1]
@@ -64,7 +76,7 @@ def get_frame():
     
         del(camera)
     
-    
+@login_required
 def attendanceCapture(request):
     try:
         return render(request, 'attendance/attendance_capture.html', {})
@@ -75,11 +87,11 @@ def attendanceCapture(request):
 @gzip.gzip_page
 def dynamic_stream(request,stream_path="video"):
     try :
-        return StreamingHttpResponse(get_frame(),content_type="multipart/x-mixed-replace;boundary=frame")
+        return StreamingHttpResponse(get_frame(request.user),content_type="multipart/x-mixed-replace;boundary=frame")
     except :
         return "error"
 
-
+@login_required
 def attendanceUpload(request):
     data = []
     file_name = 'attendance_sample.csv'
@@ -110,228 +122,105 @@ def attendanceUpload(request):
 @login_required
 def attendanceView(request):
     user = request.user
+
     if user.is_superuser:
-        qs = AttendanceLog.objects.all().order_by('-date_attended')
-
+        log = AttendanceLog.objects.all().order_by('-date_attended')
     elif user.is_staff:
-        qs = AttendanceLog.objects.filter(faculty_id=user).order_by('-date_attended')
-        idno_contains_query = request.GET.get('idno_contains')
-        if idno_contains_query != '' and idno_contains_query is not None:
-            qs = qs.filter(student_id__icontains=idno_contains_query)
-
+        log = AttendanceLog.objects.filter(faculty_id=user).order_by('-date_attended')
     else:
-        qs = AttendanceLog.objects.filter(student_id=user.username).order_by('-date_attended')
+        log = AttendanceLog.objects.filter(student_id=user.username).order_by('-date_attended')
 
-    return render(request, 'attendance/attendance_view.html', {'data':qs, 'user_id':user.username})
+    idno_query = request.GET.get('idno_extact')
+    section_query = request.GET.get('section_extact')
+    subject_query = request.GET.get('subject_extact')
+    year_query = request.GET.get('year_extact')
+
+    print(idno_query, section_query, subject_query, year_query)
+
+    if idno_query != '' and idno_query is not None:
+        log = log.filter(student_id=idno_query)
+    if section_query != '' and section_query is not None:
+        log = log.filter(section=section_query)
+    if subject_query != '' and subject_query is not None:
+        log = log.filter(subject_id=Subject.objects.get(subject_name=subject_query))
+    if year_query != '' and year_query is not None:
+        log = log.filter(year=year_query)
+
+    context = {
+        'data':log, 'user_id':user.username, 
+    }
+    context.update(SELECTION_DATA)
+    return render(request, 'attendance/attendance_view.html', context)
 
 @login_required
 def attendanceStatistics(request):
     user = request.user
-    sem_1_months = [8,9,10,11]
-    sem_2_months = [12,1,2,3,4]
+    DEAFULT_YEAR = 'engg4'
+    DEAFULT_BRANCH = 'cse'
+    chart_title = ''
 
-    x_labels = ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+    log_data = {}
 
-
-    if user.is_staff or user.is_superuser:
-        qs = AttendanceLog.objects.all()
-        idno_contains_query = request.GET.get('idno_contains')
-        if idno_contains_query != '' and idno_contains_query is not None:
-            qs = qs.filter(student_id__icontains=idno_contains_query)
-
+    if not user.is_staff:
+        try:
+            log=AttendanceLog.objects.filter(student_id=user.username).order_by('date_attended__month')
+            log_data['student'] = log_data['section'] = log_data['year'] = 1
+            chart_title += str(user.username)+' '
+        except:
+            pass
     else:
-        qs = AttendanceLog.objects.filter(student_id=user.username).order_by('-date_attended')
-    context = {'data':qs, 'user_id':user.username, 'x_labels':x_labels}
+        log=AttendanceLog.objects.all().order_by('date_attended__month')
+        log_data['student'] = log.distinct('student_id').count()
+        log_data['section'] = log.distinct('section').count()
+        log_data['year'] = log.distinct('year').count()
+
+    idno_query = request.GET.get('idno_extact')
+    section_query = request.GET.get('section_extact')
+    subject_query = request.GET.get('subject_extact')
+    branch_query = request.GET.get('branch_extact')
+    year_query = request.GET.get('year_extact')
+
+    log_data['subject'] = No_of_Subjects.objects.get(year=DEAFULT_YEAR, branch=DEAFULT_BRANCH).no_of_subjects
+
+    if idno_query != '' and idno_query is not None:
+        chart_title += str(idno_query)+' '
+        log = log.filter(student_id=idno_query)
+        log_data['student'] = 1
+
+    if section_query != '' and section_query is not None:
+        chart_title += str(section_query)+' '
+        log = log.filter(section=section_query)
+        log_data['section'] = 1
+    
+    if subject_query != '' and subject_query is not None:
+        chart_title += str(subject_query)+' '
+        log = log.filter(subject_id=Subject.objects.get(subject_name=subject_query))
+        log_data['subject'] = 1
+    
+    if year_query != '' and year_query is not None:
+        chart_title += str(year_query)+' '
+        log = log.filter(year=year_query)
+        log_data['year'] = 1
+
+    log_months = log.distinct('date_attended__month')
+    working_days = {}
+    attended_days = {}
+
+    for log_month in log_months:
+        dt = log_month.date_attended
+        month_name = calendar.month_name[dt.month]
+        _, working_days[month_name] = calendar.monthrange(dt.year, dt.month)
+        temp_attended_days = log.filter(date_attended__month=dt.month).count()
+        
+        for key,value in log_data.items():
+            temp_attended_days /= value 
+        attended_days[month_name] = temp_attended_days
+
+    if chart_title is '':
+        chart_title = DEAFULT_YEAR +' '+ DEAFULT_BRANCH
+
+    context = { 'chart_title':chart_title.upper(), 'months':list(working_days.keys()), 'no_of_working_days':list(working_days.values()), 'no_of_attended_days':list(attended_days.values())}
+    context.update(SELECTION_DATA)
+    
+
     return render(request, 'attendance/attendance_statistics.html', context)
-
-
-
-
-# ======================================================================
-# def attendanceView(request):
-#     user = request.user
-#     # subjects = getRegSubjects(user)
-#     attendance_data = []
-#     if request.method == 'POST' and request.POST["subject"] != 'all':
-#         subject_name = request.POST["subject"] 
-#         # attendance_data = getSubjectAttendance(user, subject_name)
-#         attendance_data = getDummySubjectAttendance(user, subject_name)
-#     else:
-#         # attendance_data = getUserAttendance(user)
-#         attendance_data = getDummyUserAttendance(user)
-    
-#     paginator = Paginator(attendance_data, 8)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-    
-#     context = {'data':attendance_data, "subjects":subjects, "page_obj":page_obj}
-#     return render(request, 'attendance/attendance_list.html', context)  
-#     return render(request, 'attendance/attendance_view.html', {})
-
-
-# from .attendance_automation.sample import *
-
-# @login_required
-# def attendance_upload(request):
-#     data = getDummyUploadData()[:6]
-    
-#     if request.method == 'POST':
-#         for i in range(len(data)):
-#             if request.POST.get(str(i), 'off') != 'off':
-#                 student_id = request.POST['student_id_'+str(i)]
-#                 faculty_name = request.POST['faculty_id_'+str(i)]
-#                 subject_name = request.POST['subject_id_'+str(i)]
-#                 date_attended = request.POST['date_attended_'+str(i)]
-                
-#                 log = AttendanceLog(student_id=student_id,faculty_id=Faculty.objects.get(faculty_name=faculty_name),subject_id=Subject.objects.get(subject_name=subject_name), date_attended=date_attended)
-#                 log.save()
-
-#         messages.success(request, f'Log uploaded successful.')
-#         return redirect('attendance-list')
-
-    
-#     context = { "data":data}
-#     return render(request, 'attendance/attendance_upload.html', context)
-
-# def sample(request):
-#     data = getDummyUploadData()[:5]
-
-#     if request.method == 'POST':
-#         print("attends")
-
-#         for i in range(len(data)):
-#             print(request.POST.get(str(i),'off'))
-
-    
-#     return render(request, 'attendance/sample.html', {"data":data,"indexes":[]})
-
-
-
-# @login_required
-# def attendance_list(request):
-#     user = request.user
-#     subjects = getRegSubjects(user)
-#     attendance_data = []
-#     if request.method == 'POST' and request.POST["subject"] != 'all':
-#         subject_name = request.POST["subject"] 
-#         # attendance_data = getSubjectAttendance(user, subject_name)
-#         attendance_data = getDummySubjectAttendance(user, subject_name)
-#     else:
-#         # attendance_data = getUserAttendance(user)
-#         attendance_data = getDummyUserAttendance(user)
-    
-#     paginator = Paginator(attendance_data, 8)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-    
-#     context = {'data':attendance_data, "subjects":subjects, "page_obj":page_obj}
-#     return render(request, 'attendance/attendance_list.html', context)        
-
-
-# def getSubjectAttendance(userid,subject_name):
-#     data = []
-#     sno = 1
-#     subject_id = Subject.objects.get(subject_name=subject_name).subject_id
-#     queryset = AttendanceLog.objects.filter(student_id=userid.username, subject_id=subject_id).order_by('-date_attended')
-#     for query in queryset:
-#         data.append([sno, userid, subject_name,  query.faculty_id,  query.date_attended])
-#         sno +=1
-#     return data
-
-# def getUserAttendance(userid):
-#     data = []
-#     sno = 1
-#     try:
-#         queryset = AttendanceLog.objects.filter(student_id=Student.objects.get(student_id=userid)).order_by('-date_attended')
-#         for query in queryset:
-#             data.append([sno,userid, query.subject_id, query.faculty_id, query.date_attended])
-#             sno += 1
-#     except:
-#         pass
-#     return data
-
-# def getRegSubjects(userid):
-#     subjects = []
-#     try:
-#         queryset = SemRegistration_201920.objects.get(student_id=Student.objects.get(student_id=userid.username)).subjects
-#         subjects = queryset.split('+')
-#     except:
-#         pass
-#     return subjects
-
-# #-----------------------------DUMMY DATA------------------------------
-
-# def getDummyUserAttendance(userid):
-#     parent_path = os.path.dirname(os.path.abspath(__file__))
-#     file_path = parent_path+"/attendance_data.json"
-#     with open(file_path) as fp:
-#         all_data = json.load(fp)
-#     data = []
-#     sno = 1
-#     for row in all_data:
-#         if(row["student_id"]==userid.username):
-#             data.append([sno, row["student_id"], row["subject_id"], row["faculty_id"], row["date_attended"]])
-#             sno +=1
-#     return data
-
-# def getDummySubjectAttendance(userid, subject_name):
-#     parent_path = os.path.dirname(os.path.abspath(__file__))
-#     file_path = parent_path+"/attendance_data.json"
-#     with open(file_path) as fp:
-#         all_data = json.load(fp)
-#     data = []
-#     sno = 1
-
-#     for row in all_data:
-#         if(row["student_id"]==userid.username and row["subject_id"]==subject_name):
-#             data.append([sno, row["student_id"], row["subject_id"], row["faculty_id"], row["date_attended"]])
-#             sno +=1
-#     return data
-
-# def getDummyUploadData():
-#     parent_path = os.path.dirname(os.path.abspath(__file__))
-#     file_path = parent_path+"/attendance_data.json"
-#     with open(file_path, encoding='utf-8') as fp:
-#         all_data = json.loads(fp.read())
-
-#     # with open('movie_data.json', encoding='utf-8') as data_file:
-#     # json_data = json.loads(data_file.read())
-    
-#     # data = []
-#     # n=1
-#     # for row in all_data:
-#     #     n += 1
-#     #     data.append([row["student_id"], row["subject_id"], row["faculty_id"], row["date_attended"]])
-#     #     if(n==2):
-#     #         break
-#     # return data
-#     return all_data
-
-# def getDummySubjectUploadData(subject_name):
-#     parent_path = os.path.dirname(os.path.abspath(__file__))
-#     file_path = parent_path+"/attendance_data.json"
-#     with open(file_path) as fp:
-#         all_data = json.load(fp)
-#     data = []
-#     for row in all_data:
-#         if row["subject_id"]==subject_name:
-#             data.append([row["student_id"], subject_name, row["faculty_id"], row["date_attended"]])
-#     return data
-
-# def getDummyStudentSubjectUploadData(student_id,subject_name):
-#     parent_path = os.path.dirname(os.path.abspath(__file__))
-#     file_path = parent_path+"/attendance_data.json"
-#     with open(file_path) as fp:
-#         all_data = json.load(fp)
-#     data = []
-#     for row in all_data:
-#         if row["subject_id"]==subject_name and row["student_id"]==student_id:
-#             data.append([student_id, subject_name, row["faculty_id"], row["date_attended"]])
-#     return data
-
-# def getAllSubjects(year,branch):
-#     subjects = []
-#     queryset = Subject.objects.filter(year=year,branch=branch)
-#     for query in queryset:
-#         subjects.append(query.subject_name)
-#     return subjects

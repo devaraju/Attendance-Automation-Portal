@@ -16,8 +16,7 @@ class Student(models.Model):
     year = models.CharField('Batch',max_length=5, choices=YEAR_CHOICES, default='engg4')
 
     def __str__(self):
-        return f'{self.student_id}'
-
+        return f'{self.student_id} - {self.branch} - {self.year}'
 
 class Faculty(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -26,5 +25,5 @@ class Faculty(models.Model):
     gender = models.CharField(max_length=1,choices=GENDER_CHOICES, default='m')
     
     def __str__(self):
-        return self.faculty_id
+        return f'{self.faculty_id} - {self.faculty_name}'
 

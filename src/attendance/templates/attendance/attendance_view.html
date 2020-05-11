@@ -4,37 +4,57 @@
 
 <section class="content-header">
     <div class="container-fluid">
-        <form>
+        <form method="GET">
             <div class="form-row">
                 <div class="col-2">
-                </div>
-                <div class="col form-group">
-                    <!-- <label>Date range button:</label> -->
-                    <div class="input-group">
-                        <button disabled type="button" class="btn btn-default float-right" id="daterange-btn">
-                            <i class="far fa-calendar-alt"></i> Date range
-                            <i class="fas fa-caret-down"></i>
-                        </button>
-                    </div>
                 </div>
                 {% if user.is_staff %}
                 <div class="col form-group">
                     <!-- <label>Subject:</label> -->
                     <div class="input-group">
-                        <input type="text" class="form-control" name="idno_contains" placeholder="Student ID">
+                        <input type="text" class="form-control" name="idno_extact" placeholder="Student ID">
                     </div>
                 </div>
-                {% endif %}
                 <div class="col form-group">
                     <!-- <label>Subject:</label> -->
                     <div class="input-group">
-                        <input type="text" class="form-control" name="subject_contains" placeholder="Subject">
+                        <select class="form-control" name="section_extact">
+                            <option value="">SECTION</option>
+                            {% for section in ALL_SECTIONS %}
+                                <option>{{ section.section }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-                
+                <div class="col form-group">
+                    <!-- <label>Subject:</label> -->
+                    <div class="input-group">
+                        <select class="form-control" name="year_extact">
+                            <option value="">YEAR</option>
+                            {% for year in ALL_YEARS %}
+                                <option>{{ year.year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="col form-group">
+                    <!-- <label>Subject:</label> -->
+                    <div class="input-group">
+                        <select class="form-control" name="subject_extact">
+                            <option value="">SUBJECT</option>
+                            {% for subject in ALL_SUBJECTS %}
+                                <option value="{{ subject.subject_name }}">{{ subject.subject_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
 
                 <div class="col-1">
-                    <button type="submit" disabled class="form-control btn btn-outline-secondary btn-sm"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="form-control btn btn-outline-secondary btn-sm"><i
+                            class="fas fa-search"></i></button>
                 </div>
                 <div class="col-2">
                 </div>
@@ -49,7 +69,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Requested by <strong>{{ user_id }}</strong></h3>
-                    <a href="#" class="btn btn-outline-secondary btn-sm float-sm-right" >Print</a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm float-sm-right">Print</a>
 
                 </div>
                 <!-- /.card-header -->

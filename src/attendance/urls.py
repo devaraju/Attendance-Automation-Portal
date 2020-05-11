@@ -16,6 +16,4 @@ urlpatterns = [
     path('attendance_view/', attendanceView, name="attendance-view"),
     path('attendance_statistics/', attendanceStatistics, name="attendance-statistics"),
 
-    # path('attendance_view_sample/', views.attendanceView, name="att"),
-
 ]
