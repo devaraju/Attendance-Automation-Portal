@@ -34,7 +34,7 @@ ALL_SUBJECTS = Subject.objects.all().distinct('subject_name')
 SELECTION_DATA = {'ALL_BRANCHES':ALL_BRANCHES, 'ALL_SECTIONS':ALL_SECTIONS, 'ALL_SUBJECTS':ALL_SUBJECTS, 'ALL_YEARS':ALL_YEARS }
 
 def get_frame(user):
-    camera =cv2.VideoCapture(-1)
+    camera =cv2.VideoCapture(0)
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
     attendance_file = os.path.join(base_dir, 'attendance_data', 'attendance_'+str(datetime.now())+'.csv')
@@ -50,6 +50,7 @@ def get_frame(user):
         writer.writeheader()
         
         all_idnos = []
+        print('[INFO] Attendance Capturing...')
         while True:
             try:
                 ret, image = camera.read()

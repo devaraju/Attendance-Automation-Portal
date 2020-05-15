@@ -22,11 +22,10 @@ if MODEL_PATH is None:
 
 face_data = pickle.loads(open(MODEL_PATH, 'rb').read())
 
-
 # ---------------------------------------------------------------
 
 def getFacialMatching(rgb_image, faces):
-    print('getFaceMatching loaded...')
+    # print('getFaceMatching loaded...')
     encodings = face_recognition.face_encodings(rgb_image, faces)
     all_labels = []
     for encoding in encodings:
@@ -43,7 +42,7 @@ def getFacialMatching(rgb_image, faces):
 
         if label is not "Unknown" and label not in all_labels:
             all_labels.append(label)
-            print(label)
+            print('\t',label)
 
     return all_labels
 

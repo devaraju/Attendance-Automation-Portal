@@ -7,6 +7,7 @@ migrations/
 *.jpg
 *.JPG
 *.pickle
+*.csv
 
 dataset/*
 **/!N140297.jpg
@@ -16,3 +17,4 @@ models/*
 
 .vscode/
 myvenv/
+Sample_Screens/
