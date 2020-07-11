@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Attendance Automation</title>
-    
+
     <!-- jQuery -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
 
@@ -18,19 +18,19 @@
     <!-- IonIcons -->
     <!-- <link rel="stylesheet" href="{% static 'icons/ionicons.min.css' %}"> -->
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'css/adminlte.min.css' %}">
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    
+
     <!-- Toggle button -->
     <link href="{% static 'css/bootstrap4-toggle.min.css' %}" rel="stylesheet">
-    
+
     <!-- daterange picker -->
     <link rel="stylesheet" href="{% static 'css/daterangepicker.css'%}">
-    
+
     <!-- CHART CSS & JS -->
     <link rel="stylesheet" href="{% static 'css/Chart.min.css' %}">
     <script src="{% static 'js/Chart.min.js' %}"></script>
@@ -58,12 +58,12 @@
             </ul>
 
             <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
+            <form class="form-inline ml-3" >
                 <div class="input-group input-group-sm">
                     <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                        aria-label="Search">
+                        aria-label="Search" disabled>
                     <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
+                        <button class="btn btn-navbar" type="submit" disabled> 
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -163,9 +163,9 @@
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Capture Attendance</p>
                                         </a>
-                                    </li> 
+                                    </li>
                                 {% endif %}
-                                                                   
+
                                 <li class="nav-item">
                                     <a href="{% url 'attendance-view' %}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -180,10 +180,10 @@
                                 </li>
                             </ul>
                         </li>
-                    
+
                         <!-- SIDE BAR OPTIONS -->
                         <li class="nav-header">Academics</li>
-                        
+
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
@@ -199,9 +199,9 @@
                                             <i class="far fa-eye nav-icon"></i>
                                             <p>SemRegistrations</p>
                                         </a>
-                                    </li>      
+                                    </li>
                                 {% else %}
-                                
+
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">&nbsp;&nbsp;
                                         <i class="far fa-eye nav-icon"></i>
@@ -279,7 +279,7 @@
                             </a>
                         </li>
 
-                        
+
                         <li class="nav-header">Notifiacations</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -320,8 +320,8 @@
             <!-- /.sidebar -->
         </aside>
 
-        
-        
+
+
         <div class="content-wrapper">
             <main role="main" class="container">
                 <div class="row">
@@ -362,7 +362,7 @@
 
     <!-- REQUIRED SCRIPTS -->
 
-    
+
     <!-- Bootstrap -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <!-- AdminLTE -->
@@ -382,19 +382,19 @@
         $(function () {
           //Initialize Select2 Elements
           $('.select2').select2()
-      
+
           //Initialize Select2 Elements
           $('.select2bs4').select2({
             theme: 'bootstrap4'
           })
-      
+
           //Datemask dd/mm/yyyy
           $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
           //Datemask2 mm/dd/yyyy
           $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
           //Money Euro
           $('[data-mask]').inputmask()
-      
+
           //Date range picker
           $('#reservationdate').datetimepicker({
               format: 'L'
@@ -427,28 +427,28 @@
               $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             }
           )
-      
+
           //Timepicker
           $('#timepicker').datetimepicker({
             format: 'LT'
           })
-          
+
           //Bootstrap Duallistbox
           $('.duallistbox').bootstrapDualListbox()
-      
+
           //Colorpicker
           $('.my-colorpicker1').colorpicker()
           //color picker with addon
           $('.my-colorpicker2').colorpicker()
-      
+
           $('.my-colorpicker2').on('colorpickerChange', function(event) {
             $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
           });
-      
+
           $("input[data-bootstrap-switch]").each(function(){
             $(this).bootstrapSwitch('state', $(this).prop('checked'));
           });
-      
+
         })
       </script>
 </body>

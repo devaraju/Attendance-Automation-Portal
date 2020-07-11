@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import *
+from .models import AttendanceLog
 
 class AttendanceLogAdmin(admin.ModelAdmin):
     list_display = ['id','student_id', 'faculty_id', 'subject_id', 'date_attended']

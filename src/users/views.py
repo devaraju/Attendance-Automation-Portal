@@ -13,7 +13,6 @@ def studentRegister(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             form.save();
-            messages.success(request, f'Account has been created! You are now able to login')
             return redirect('login')
     else:
         form = StudentRegisterForm()
@@ -25,7 +24,6 @@ def facultyRegister(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             form.save();
-            messages.success(request, f'Account has been created! You are now able to login')
             return redirect('login')
     else:
         form = FacultyRegisterForm()

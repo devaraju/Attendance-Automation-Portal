@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from users.models import Faculty
 from attendance.models import AttendanceLog
-from academics.models import Subject
+from academics.models import Subject, No_of_Subjects
 
 import os
 import json
@@ -13,10 +13,8 @@ from datetime import datetime
 class Command(BaseCommand):
 
     # def add_arguments(self, parser):
-    #     parser.add_argument('attendance_file', type=str,
-    #                         help="JSON file that contains attendance data")
-    #     parser.add_argument('subjects_file', type=str,
-    #                         help="JSON file that contains subjects data")
+    #     parser.add_argument('attendance_file', type=str, help="JSON file that contains attendance data")
+    #     parser.add_argument('subjects_file', type=str, help="JSON file that contains subjects data")
 
     def handle(self, *args, **kwargs):
         base_dir = os.path.dirname(os.path.realpath(__file__))
@@ -24,7 +22,7 @@ class Command(BaseCommand):
         # subjects_file = kwargs["subjects_data.json"]
         attendance_file = os.path.join(base_dir, 'sample_attendance_data.json')
         subjects_file = os.path.join(base_dir, 'subjects_data.json')
-        
+
         # >>> SUBJECTS DATA <<<
         with open(f"{subjects_file}") as file:
             data = json.load(file)
@@ -65,12 +63,6 @@ class Command(BaseCommand):
                     faculty = Faculty.objects.get(faculty_id = faculty_id)
                     self.stdout.write(self.style.SUCCESS(f'successfully added {faculty_id}'))
 
-                # try:
-                #     dt=[int(i) for i in date_attended.split(',')]
-                #     log = AttendanceLog.objects.create(student_id=student_id,faculty_id=Faculty.objects.get(faculty_id=faculty_id),subject_id=Subject.objects.get(subject_name=subject_id), date_attended=datetime(*dt))
-                # except:
-                #     self.stdout.write(self.style.ERROR(f'Error occured with {student_id}-{date_attended}-{subject_id}'))
-
                 if student_id not in STUDENT_IDS:
                     STUDENT_IDS.append(student_id)
                     REG_SUBJECTS[student_id] = []
@@ -80,7 +72,6 @@ class Command(BaseCommand):
                 if subject_id not in FACULTY_SUBJECT:
                     FACULTY_SUBJECT[subject_id] = faculty_id
 
-        # print(FACULTY_SUBJECT, REG_SUBJECTS)
 
         YEAR = 2020
         MONTHS = [1,2,3,4,5]
@@ -108,23 +99,6 @@ class Command(BaseCommand):
                             curr_datetime = curr_datetime.replace(hour=class_hour)
                             log = AttendanceLog.objects.get_or_create(student_id=student_id,faculty_id=Faculty.objects.get(faculty_id=FACULTY_SUBJECT[reg_subject]),subject_id=Subject.objects.get(subject_name=reg_subject), date_attended=curr_datetime)
                         except:
-                            self.stdout.write(self.style.ERROR(f'Error occured with {student_id}-{date_attended}-{subject_id}'))                        
-
+                            self.stdout.write(self.style.ERROR(f'Error occured with {student_id}-{date_attended}-{subject_id}'))
+        subs_cnt = No_of_Subjects.objects.get_or_create(no_of_subjects=3)
         self.stdout.write(self.style.SUCCESS('successfully added attendance data.'))
-
-
-# DEELETE THE SUNDAY LOGS
-# YEAR = 2020
-# MONTHS = [2,3,4]
-
-# for month in MONTHS:
-#     for date in range(1,32):
-#         try:
-#             curr_date = datetime(YEAR, month, date)
-#         except:
-#             continue
-        
-#         if curr_date.weekday() == 6:
-#             log = AttendanceLog.objects.filter(date_attended__month=curr_date.month, date_attended__day=curr_date.day)
-    
-

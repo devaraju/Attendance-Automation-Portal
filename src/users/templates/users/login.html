@@ -1,51 +1,49 @@
 {% extends 'users/user_base.html' %}
 {% load crispy_forms_tags %}
 
-{% block user_form_content %}
+  {% block user_form_content %}
+  <!-- Container -->
+  <div id="container" >
 
-<div class="container">
+      <!-- Header -->
+      <div id="header">
+          <div id="branding">
+            <h1 id="site-name"><a href="#">Attendance Automation</a></h1>
+          </div>
+      </div>
+      <!-- END Header -->
 
-    <!-- Outer Row  -->
-    <div class="row justify-content-center my-5">
+      <!-- Content -->
+      <div id="content" class="colM">
 
-        <div class="col-xl-5 col-lg-12 col-md-9">
-
-            <div class="card shadow-lg border-0">
-                <div class="card-body">
-                    <!-- Nested Row within Card Body -->
-                    <div class="row">
-
-                        <div class="col-lg-9 mx-auto">
-                            <div class="py-5 text-center">
-                                <div>
-                                    <h1 class="h4 text-gray-900 mb-4">Welcome to AA!</h1>
-                                </div>
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    {{ form|crispy }}
-
-                                    <div class="form-group">
-                                        <input type="submit" class="btn btn-outline-success" value="Login">
-                                    </div>
-                                </form>
-
-                                <hr>
-                                <div class="text-center" style="display: none;">
-                                    <a class="small" href="#">Forgot Password?</a>
-                                </div>
-                                <div class="text-center">
-                                    <a class="small" href="{% url 'register' %}">Create an Account!</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div id="content-main">
+          <form method="post" id="login-form">
+            {% csrf_token %}
+            <div class="form-row">
+              {{form.username|as_crispy_field}}
             </div>
+
+            <div class="form-row">
+              {{form.password|as_crispy_field}}
+            </div>
+
+            <div class="submit-row">
+              <label>&nbsp;</label><input type="submit" value="Log in">
+            </div>
+          </form>
 
         </div>
 
-    </div>
+        <br class="clear">
 
-</div>
+      </div>
+      <!-- END Content -->
 
-{% endblock %}
+      <div id="footer" >
+        <div style="float:right; margin-bottom:15px">
+            <a href="{% url 'register' %}">Create an Account!</a>
+        </div>
+      </div>
+  </div>
+
+  {% endblock %}

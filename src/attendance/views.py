@@ -1,30 +1,22 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
-from django.http import HttpResponse,StreamingHttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
 from django.contrib import messages
-from django.utils import timezone
 
-from django.views.decorators import gzip
 from datetime import datetime
-import face_recognition
 import calendar
-import time
-import cv2
+import glob
 import sys
 import csv
 import os
 
 from users.models import Student, Faculty
 from attendance.models import AttendanceLog
-from academics.models import No_of_Subjects, Subject, SemRegistration_201920, Teaching
-from .forms import AttendanceLogForm
+from academics.models import No_of_Subjects, Subject, Teaching
 
-from .facial_mathcing.testing import getFacialMatching
+from .facial_mathcing.face_matching import facialAttendance
 
-# <<< USER DEFINED VIEWS >>>
 
 ALL_YEARS = AttendanceLog.objects.all().distinct('year')
 ALL_SECTIONS = AttendanceLog.objects.all().distinct('section')
@@ -33,75 +25,48 @@ ALL_SUBJECTS = Subject.objects.all().distinct('subject_name')
 
 SELECTION_DATA = {'ALL_BRANCHES':ALL_BRANCHES, 'ALL_SECTIONS':ALL_SECTIONS, 'ALL_SUBJECTS':ALL_SUBJECTS, 'ALL_YEARS':ALL_YEARS }
 
-def get_frame(user):
-    camera =cv2.VideoCapture(0)
-
+@login_required
+def attendanceCapture(request):
+    user = request.user
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    attendance_file = os.path.join(base_dir, 'attendance_data', 'attendance_'+str(datetime.now())+'.csv')
+    file_name = 'attendance_'+str(datetime.now())+'.csv'
+    attendance_file = os.path.join(base_dir, 'attendance_data', file_name)
 
     faculty_id = Faculty.objects.get(faculty_id=user)
     fac_teach_sub = Teaching.objects.get(faculty_id=faculty_id).subject_id
-    subject_id = Subject.objects.get(subject_id=fac_teach_sub.subject_id)
+    subject_id = Subject.objects.get(subject_id=fac_teach_sub.subject_id).subject_name
 
+    attendedInfo = {
+        'subject_id':subject_id,
+        'faculty_id':faculty_id.faculty_id,
+    }
 
-    with open(attendance_file, 'w') as csv_file:
-        fieldnames = ['student_id', 'date_attended', 'faculty_id','subject_id']
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        
-        all_idnos = []
-        print('[INFO] Attendance Capturing...')
-        while True:
-            try:
-                ret, image = camera.read()
-                if ret:
-                    image = cv2.flip(image, 1)
-                    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    msg = facialAttendance(attendance_file, attendedInfo)
 
-                    faces = face_recognition.face_locations(rgb_image, model="hog")
-                    if len(faces) != 0:
-                        for (top, right, bottom, left) in faces:
-                            cv2.rectangle(image, (left, top), (right, bottom), (0, 255, 0), 2)
-                        
-                        idnos = getFacialMatching(rgb_image, faces)
-                        for idno in idnos:
-                            if idno not in all_idnos:
-                                writer.writerow({'student_id': idno, 'date_attended': datetime.now(), 'faculty_id': faculty_id, 'subject_id':subject_id})
-                                all_idnos.append(idno)
+    if msg:
+        return redirect('attendance-upload')
+    return HttpResponse('<h1>Nothing to upload</h1>')
 
-                    imgencode=cv2.imencode('.jpg', image)[1]
-                    stringData=imgencode.tostring()
-                    yield (b'--frame\r\n'b'Content-Type: text/plain\r\n\r\n'+stringData+b'\r\n')
-            except:
-                print('-> Error Occured')
-    
-        del(camera)
-    
-@login_required
-def attendanceCapture(request):
-    try:
-        return render(request, 'attendance/attendance_capture.html', {})
-    except:
-        return HttpResponse('<h1>ERROR</h1>')
-    
-
-@gzip.gzip_page
-def dynamic_stream(request,stream_path="video"):
-    try :
-        return StreamingHttpResponse(get_frame(request.user),content_type="multipart/x-mixed-replace;boundary=frame")
-    except :
-        return "error"
-
-@login_required
 def attendanceUpload(request):
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    attendenceDataPath = os.path.join(base_dir, 'attendance_data')
+
+    attendance_files = glob.glob(os.path.join(base_dir, 'attendance_data','*.csv'))
+    attendance_files.sort(key=os.path.getmtime, reverse=True)
+
+    attendance_file = attendance_files[0]
+    file_name = attendance_file.split('/')[-1]
+
+    if attendance_file is None:
+        return render(request, 'attendance/attendance_upload.html', {'data':[], 'file_name':fileName})
+
     data = []
-    file_name = 'attendance_sample.csv'
-    with open(file_name, mode='r') as csv_file:
+    with open(attendance_file, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:
             data.append(dict(row))
-    
+
     if request.method == 'POST':
         for i in range(1,len(data)+1):
             if request.POST.get('check_'+str(i), 'off') == 'on':
@@ -109,9 +74,10 @@ def attendanceUpload(request):
                 faculty_id = request.POST['faculty_id_'+str(i)]
                 subject_name = request.POST['subject_id_'+str(i)]
                 date_attended = request.POST['date_attended_'+str(i)]
-                
-                # print(student_id, subject_name, date_attended)
+
+                print(student_id, subject_name, date_attended)
                 dt=[int(i) for i in date_attended.split(',')]
+
                 log = AttendanceLog.objects.create(student_id=student_id,faculty_id=Faculty.objects.get(faculty_id=faculty_id),subject_id=Subject.objects.get(subject_name=subject_name), date_attended=datetime(*dt))
 
         messages.success(request, f'Log uploaded successful.')
@@ -127,7 +93,7 @@ def attendanceView(request):
     if user.is_superuser:
         log = AttendanceLog.objects.all().order_by('-date_attended')
     elif user.is_staff:
-        log = AttendanceLog.objects.filter(faculty_id=user).order_by('-date_attended')
+        log = AttendanceLog.objects.filter(faculty_id=Faculty.objects.get(faculty_id=user)).order_by('-date_attended')
     else:
         log = AttendanceLog.objects.filter(student_id=user.username).order_by('-date_attended')
 
@@ -148,7 +114,7 @@ def attendanceView(request):
         log = log.filter(year=year_query)
 
     context = {
-        'data':log, 'user_id':user.username, 
+        'data':log, 'user_id':user.username,
     }
     context.update(SELECTION_DATA)
     return render(request, 'attendance/attendance_view.html', context)
@@ -170,7 +136,7 @@ def attendanceStatistics(request):
         except:
             pass
     else:
-        log=AttendanceLog.objects.all().order_by('date_attended__month')
+        log=AttendanceLog.objects.all()
         log_data['student'] = log.distinct('student_id').count()
         log_data['section'] = log.distinct('section').count()
         log_data['year'] = log.distinct('year').count()
@@ -192,12 +158,12 @@ def attendanceStatistics(request):
         chart_title += str(section_query)+' '
         log = log.filter(section=section_query)
         log_data['section'] = 1
-    
+
     if subject_query != '' and subject_query is not None:
         chart_title += str(subject_query)+' '
         log = log.filter(subject_id=Subject.objects.get(subject_name=subject_query))
         log_data['subject'] = 1
-    
+
     if year_query != '' and year_query is not None:
         chart_title += str(year_query)+' '
         log = log.filter(year=year_query)
@@ -212,16 +178,68 @@ def attendanceStatistics(request):
         month_name = calendar.month_name[dt.month]
         _, working_days[month_name] = calendar.monthrange(dt.year, dt.month)
         temp_attended_days = log.filter(date_attended__month=dt.month).count()
-        
+
         for key,value in log_data.items():
-            temp_attended_days /= value 
+            temp_attended_days /= value
         attended_days[month_name] = temp_attended_days
 
-    if chart_title is '':
+    if chart_title == '':
         chart_title = DEAFULT_YEAR +' '+ DEAFULT_BRANCH
 
     context = { 'chart_title':chart_title.upper(), 'months':list(working_days.keys()), 'no_of_working_days':list(working_days.values()), 'no_of_attended_days':list(attended_days.values())}
     context.update(SELECTION_DATA)
-    
+
 
     return render(request, 'attendance/attendance_statistics.html', context)
+
+
+# <<<<<<TESTING MODULES>>>>>
+
+from django.http import StreamingHttpResponse
+from django.views.decorators import gzip
+
+def get_frame(user):
+    camera =cv2.VideoCapture(0)
+
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    attendance_file = os.path.join(base_dir, 'attendance_data', 'attendance_'+str(datetime.now())+'.csv')
+
+    faculty_id = Faculty.objects.get(faculty_id=user)
+    fac_teach_sub = Teaching.objects.get(faculty_id=faculty_id).subject_id
+    subject_id = Subject.objects.get(subject_id=fac_teach_sub.subject_id)
+
+
+    with open(attendance_file, 'w') as csv_file:
+        fieldnames = ['student_id', 'date_attended', 'faculty_id','subject_id']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+
+        all_idnos = []
+        print('[INFO] Attendance Capturing...')
+        while True:
+            try:
+                ret, image = camera.read()
+                if ret:
+                    image = cv2.flip(image, 1)
+                    imgencode=cv2.imencode('.jpg', image)[1]
+                    stringData=imgencode.tostring()
+                    yield (b'--frame\r\n'b'Content-Type: text/plain\r\n\r\n'+stringData+b'\r\n')
+            except:
+                print('-> Error Occured')
+
+        del(camera)
+
+@login_required
+def attendanceCapture_dev(request):
+    try:
+        return render(request, 'attendance/attendance_capture.html', {})
+    except:
+        return HttpResponse('<h1>ERROR</h1>')
+
+
+@gzip.gzip_page
+def dynamic_stream(request,stream_path="video"):
+    try :
+        return StreamingHttpResponse(get_frame(request.user),content_type="multipart/x-mixed-replace;boundary=frame")
+    except :
+        return "error"

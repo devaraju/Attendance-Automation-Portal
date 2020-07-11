@@ -8,19 +8,19 @@ from .models import Student, Faculty
 class StudentRegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for key, field in self.fields.items():
-            field.widget.attrs.update({'placeholder': field.label})
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     for key, field in self.fields.items():
+    #         field.widget.attrs.update({'placeholder': field.label})
 
 class FacultyRegisterForm(UserCreationForm):
     is_staff = forms.BooleanField(initial=True, widget=forms.HiddenInput)
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2', 'is_staff']
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for key, field in self.fields.items():
@@ -35,4 +35,3 @@ class FacultyUpdateForm(ModelForm):
     class Meta:
         model = Faculty
         exclude = ['user', 'faculty_id']
-

@@ -4,17 +4,9 @@ db.sqlite3
 media/
 migrations/
 
-*.jpg
-*.JPG
-*.pickle
 *.csv
 
-dataset/*
-**/!N140297.jpg
-
-models/*
-**/!E4_CSE_encoder.pickle
+admin/
 
 .vscode/
 myvenv/
-Sample_Screens/
