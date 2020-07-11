@@ -4,7 +4,7 @@
 
 <html lang="en-us" >
 <head>
-  <title>Log in | Django site admin</title>
+  <title>Attendance Automation | Authentication</title>
   <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'admin/css/login.css' %}">
 
@@ -14,8 +14,14 @@
   <meta name="robots" content="NONE,NOARCHIVE">
 </head>
 
-<body class=" login" data-admin-utc-offset="19800" style="background-color:whitesmoke;">
+<body class="login" data-admin-utc-offset="19800" style="background-color:whitesmoke;">
 
+<style>
+ div#container{
+  border: 1px solid;
+  box-shadow: 5px 5px 5px #888888;
+ }
+</style>
 
             {% block user_form_content %}
             {% endblock %}
