@@ -28,9 +28,9 @@ face_data = pickle.loads(open(MODEL_PATH, 'rb').read())
 def facialAttendance(attendance_file, attendedInfo):
     try:
         try:
-            camera = cv2.VideoCapture(1)
-        except:
             camera = cv2.VideoCapture(0)
+        except:
+            camera = cv2.VideoCapture(1)
     except:
         print('Error loading camera')
         return False
